@@ -1,9 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><!DOCTYPE html>
-<html lang="en">
-<head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>IUCN Extinction-Risk Predictor</title>
@@ -12,33 +9,6 @@
 <body>
 <header><h1>🌿 IUCN Extinction-Risk Predictor</h1>
 <p>Predicts a species' next Red List category (LC, NT, VU, EN, CR, EX) with a Random Forest.</p></header>
-<main>
-<div id="demo" class="banner"></div>
-<form id="form" autocomplete="off">
-  <label for="name">Species name (common or scientific)</label>
-  <input id="name" list="names" placeholder="e.g. Tiger, Panthera tigris" required>
-  <datalist id="names"></datalist>
-  <details id="manual"><summary>Species not in the list? Enter its details yourself</summary>
-    <label for="status">Current IUCN status</label><select id="status"></select>
-    <label for="group">Taxonomic group</label><select id="group"></select>
-  </details>
-  <button type="submit">Predict status</button>
-</form>
-<section id="result" aria-live="polite"></section>
-<p class="note"><b>How to read this:</b> the model predicts the <i>next assessment category</i> from the current status and taxonomic group only. It is not a forecast of extinction and cannot judge a species from its name alone.</p>
-</main>
-<script src="data.js"></script>
-<script src="script.js"></script>
-</body>
-</html>
-
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>IUCN Extinction-Risk Predictor</title>
-<link rel="stylesheet" href="style.css">
-</head>
-<body>
-<header><h1>🌿 IUCN Extinction-Risk Predictor</h1>
-<p>Predicts a species' next Red List category (LC, NT, VU, EN, CR, EX).</p></header>
 <main>
 <div id="demo" class="banner"></div>
 <form id="form" autocomplete="off">
