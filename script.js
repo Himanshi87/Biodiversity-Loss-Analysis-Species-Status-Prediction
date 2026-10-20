@@ -2,7 +2,6 @@ const DATA = (typeof BIO !== "undefined") ? BIO : require("./data.js");
 const ORDER = ["LC", "NT", "VU", "EN", "CR", "EX"];
 const LABEL = {LC: "Least Concern", NT: "Near Threatened", VU: "Vulnerable", EN: "Endangered", CR: "Critically Endangered", EX: "Extinct"};
 const COLOR = {LC: "#4c9f50", NT: "#a6c34a", VU: "#f2c230", EN: "#f28c28", CR: "#d64545", EX: "#4a4a4a"};
-const GENERAL = ["Habitat loss and degradation (agriculture, logging, urban growth)", "Hunting, poaching and illegal wildlife trade", "Overfishing and fishing bycatch", "Invasive species and disease", "Pollution and chemical contamination", "Climate change and extreme weather", "Small, fragmented populations with low genetic diversity"];
 const TIER = {LC: "Low", NT: "Low", VU: "Medium", EN: "High", CR: "High", EX: "High"};
 
 function predict(group, status) {
@@ -21,13 +20,6 @@ if (typeof document !== "undefined") {
   const esc = s => String(s).replace(/[&<>"']/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"}[c]));
   const pc = x => (x * 100).toFixed(1) + "%";
   const badge = s => `<span class="badge" style="background:${COLOR[s]}">${s}</span> ${LABEL[s]}`;
-
-  const threatHTML = (status, top, sp) => {
-    if (!["EN", "CR"].includes(status) && !["EN", "CR"].includes(top)) return "";
-    const own = sp && sp[5] && sp[5].length;
-    return `<h3>Factors affecting ${own ? "this species" : "EN / CR species (general)"}</h3><ul>${(own ? sp[5] : GENERAL).map(t => `<li>${esc(t)}</li>`).join("")}</ul>` +
-      '<p class="note">Informational only: these factors are not inputs to the prediction model.</p>';
-  };
 
   if (DATA.demo) $("demo").innerHTML = "⚠️ <b>Demo model:</b> trained on synthetic data, so predictions are NOT real findings. Run <code>export_model.py</code> with your real dataset (see README).";
   $("names").innerHTML = DATA.species.map(s => `<option value="${esc(s[1] || s[0])}">${esc(s[0])}</option>`).join("");
@@ -60,7 +52,7 @@ if (typeof document !== "undefined") {
     $("result").innerHTML = `<h2>${title}</h2>${extra}
       <p>Predicted next IUCN status:</p><p>${badge(r.top)}</p>
       <p>Confidence ${pc(r.conf)} · Risk tier: <b>${TIER[r.top]}</b> · Worsen ${pc(r.worse)} / Improve ${pc(r.better)} / Same ${pc(r.same)}</p>
-      ${bars}${threatHTML(status, r.top, sp)}${r.known ? "" : '<p class="note">⚠️ Group not in training data; prediction relies mainly on current status.</p>'}
+      ${bars}${r.known ? "" : '<p class="note">⚠️ Group not in training data; prediction relies mainly on current status.</p>'}
       <p class="note">Probabilities are conditional on the status changing, as the training data only contains changed species.</p>`;
   });
 }
