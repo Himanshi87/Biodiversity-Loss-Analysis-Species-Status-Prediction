@@ -27,6 +27,23 @@ CURATED = [
  ("Chelonia mydas","Green Sea Turtle","REPTILIA","EN"),("Dermochelys coriacea","Leatherback Sea Turtle","REPTILIA","VU"),
  ("Varanus komodoensis","Komodo Dragon","REPTILIA","EN"),("Incilius periglenes","Golden Toad","AMPHIBIA","EX"),
 ]
+THREATS = {
+ "Panthera tigris":["Poaching for skins and bones","Habitat loss and fragmentation","Loss of prey species","Human-wildlife conflict"],
+ "Diceros bicornis":["Poaching for horn","Illegal wildlife trade","Habitat loss"],
+ "Loxodonta cyclotis":["Poaching for ivory","Forest loss and fragmentation","Bushmeat hunting"],
+ "Loxodonta africana":["Poaching for ivory","Habitat loss","Human-elephant conflict"],
+ "Elephas maximus":["Habitat loss and fragmentation","Human-elephant conflict","Poaching"],
+ "Pongo abelii":["Deforestation (palm oil, logging)","Illegal pet trade","Hunting and conflict"],
+ "Pan troglodytes":["Habitat loss","Hunting for bushmeat","Disease"],
+ "Balaenoptera musculus":["Ship strikes","Entanglement in fishing gear","Ocean noise","Historic whaling"],
+ "Phocoena sinus":["Bycatch in gillnets (illegal totoaba fishing)","Extremely small population"],
+ "Ardeotis nigriceps":["Collisions with power lines","Grassland habitat loss","Hunting and disturbance"],
+ "Strigops habroptilus":["Introduced predators (cats, stoats, rats)","Very small population","Low genetic diversity"],
+ "Gavialis gangeticus":["River damming and sand mining","Fishing-net entanglement","Habitat loss"],
+ "Eretmochelys imbricata":["Illegal shell trade","Egg harvesting","Loss of nesting beaches and coral reefs","Fisheries bycatch"],
+ "Chelonia mydas":["Fisheries bycatch","Egg and turtle harvesting","Nesting-habitat loss","Climate change"],
+ "Varanus komodoensis":["Climate change and sea-level rise","Habitat loss","Loss of prey"],
+}
 f = find_file(ROOT / "data", ["Markov*.xlsx", "Markov*.xls"])
 if f:
     species, _ = parse_status_changes(read_any(f.read_bytes(), f.name)); demo = False
@@ -39,6 +56,8 @@ for g in list(b["taxonomies"]) + ["__unseen__"]:
 db = {} if demo else {r["Scientific name"]: [r["Scientific name"], str(r["Common name"]) if r["Common name"] == r["Common name"] else "", r["Taxonomy"], r["Status_2021"], r["Status_2022"]] for _, r in species.iterrows()}
 for sci, com, grp, st in CURATED:
     db.setdefault(sci, [sci, com, grp, st, ""])
+for v in db.values():
+    v.append(THREATS.get(v[0], []))
 out = {"demo": demo, "groups": b["taxonomies"], "model": model, "species": sorted(db.values(), key=lambda x: x[0])}
 Path(ROOT / "biodiversity_website" / "data.js").write_text(
     "var BIO = " + json.dumps(out, ensure_ascii=False) + ";\nif (typeof module !== 'undefined') module.exports = BIO;\n", encoding="utf-8")
